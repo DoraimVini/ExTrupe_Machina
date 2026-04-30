@@ -254,5 +254,13 @@
         "details": "Encaminhando para AGENT_AUDITORIA",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:30.421801",
+        "agent": "AgentAuditoria",
+        "action": "REPORT_GENERATION",
+        "details": "Gerando relatório semanal.",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
