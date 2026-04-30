@@ -86,5 +86,13 @@
         "details": "AMBIGUOUS",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:01.303015",
+        "agent": "ORCHESTRATOR",
+        "action": "ROUTING_WAIT",
+        "details": "Pedindo clarificação.",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
