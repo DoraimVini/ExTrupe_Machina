@@ -446,5 +446,13 @@
         "details": "AGENT_ESTOQUE",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:57:12.442226",
+        "agent": "ORCHESTRATOR",
+        "action": "ROUTING",
+        "details": "Encaminhando para AGENT_ESTOQUE",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
