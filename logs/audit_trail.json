@@ -790,5 +790,13 @@
         "details": "Encaminhando para AGENT_ESTOQUE",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T15:05:39.538370",
+        "agent": "ORCHESTRATOR",
+        "action": "RECEIVE_INPUT",
+        "details": "Canal: Internal | Conteúdo: Gerar relatório de performance semanal.",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
