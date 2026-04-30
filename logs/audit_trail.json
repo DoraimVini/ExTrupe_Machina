@@ -662,5 +662,13 @@
         "details": "Canal: Feira | Conteúdo: Vendi 1 top_natural_M agora no dinheiro.",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T15:04:03.611656",
+        "agent": "ORCHESTRATOR",
+        "action": "INTENT_IDENTIFIED",
+        "details": "AGENT_ESTOQUE",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
