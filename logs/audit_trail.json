@@ -398,5 +398,13 @@
         "details": "Sistema Trupe BR Orchestrator Iniciado.",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:57:10.361511",
+        "agent": "ORCHESTRATOR",
+        "action": "RECEIVE_INPUT",
+        "details": "Canal: WhatsApp | Conteúdo: Oi! Qual o material do top natural M e quanto custa?",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
