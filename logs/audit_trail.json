@@ -262,5 +262,13 @@
         "details": "Gerando relatório semanal.",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:30.871941",
+        "agent": "AgentAuditoria",
+        "action": "REPORT_COMPLETE",
+        "details": "Relatório finalizado.",
+        "reasoning": "{'periodo': 'Semana de 2026-04-30', 'receita_total': 1250.0, 'top_produtos': ['top_natural_M', 'faixa_dread_color', 'biquini_terracota_P'], 'estoque_critico': ['touca_cinza_U'], 'alertas': ['Nenhum canal com problema.'], 'recomendacao': 'Aumentar produção de tops naturais para a feira de Lavradio.'}",
+        "status": "logged"
     }
 ]
