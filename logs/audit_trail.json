@@ -222,5 +222,13 @@
         "details": "AGENT_ESTOQUE",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:28.889380",
+        "agent": "ORCHESTRATOR",
+        "action": "ROUTING",
+        "details": "Encaminhando para AGENT_ESTOQUE",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
