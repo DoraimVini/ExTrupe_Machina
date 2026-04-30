@@ -694,5 +694,13 @@
         "details": "AGENT_AUDITORIA",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T15:04:05.359223",
+        "agent": "ORCHESTRATOR",
+        "action": "ROUTING",
+        "details": "Encaminhando para AGENT_AUDITORIA",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
