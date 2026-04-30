@@ -190,5 +190,13 @@
         "details": "AGENT_ATENDIMENTO",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:27.595302",
+        "agent": "AgentAtendimento",
+        "action": "PROCESS_REQUEST",
+        "details": "Entrada: Oi! Qual o material do top natural M e quanto custa?",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
