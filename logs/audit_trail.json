@@ -390,5 +390,13 @@
         "details": "Sessão finalizada.",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:57:09.091595",
+        "agent": "Harness",
+        "action": "STARTUP",
+        "details": "Sistema Trupe BR Orchestrator Iniciado.",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
