@@ -742,5 +742,13 @@
         "details": "Canal: WhatsApp | Conteúdo: Oi! Qual o material do top natural M e quanto custa?",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T15:05:36.980119",
+        "agent": "ORCHESTRATOR",
+        "action": "INTENT_IDENTIFIED",
+        "details": "AGENT_ATENDIMENTO",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
