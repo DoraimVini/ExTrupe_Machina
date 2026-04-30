@@ -430,5 +430,13 @@
         "details": "Oi! Qual o material do top natural M e quanto custa?",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:57:11.800293",
+        "agent": "ORCHESTRATOR",
+        "action": "RECEIVE_INPUT",
+        "details": "Canal: Feira | Conteúdo: Vendi 1 top_natural_M agora no dinheiro.",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
