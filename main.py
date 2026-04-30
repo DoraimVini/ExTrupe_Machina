@@ -2,7 +2,10 @@ import os
 from dotenv import load_dotenv
 from harness.audit.logger import AuditLogger
 from harness.agents.inventory import InventoryAgent
-from harness.agents.marketing import MarketingAgent
+from harness.agents.atendimento import AgentAtendimento
+from harness.agents.auditoria import AgentAuditoria
+from harness.agents.orchestrator import OrchestratorAgent
+from harness.audit import dashboard_gen
 
 def run_harness():
     # 0. Carrega variáveis de ambiente
@@ -10,44 +13,38 @@ def run_harness():
     notion_token = os.getenv("NOTION_TOKEN")
     db_estoque = os.getenv("DATABASE_ID_ESTOQUE", "35205465-f1ab-80a8-8de4-e23cea9e7136")
 
-    if not notion_token:
-        print("[AVISO] NOTION_TOKEN não encontrado no arquivo .env")
-        print("Por favor, configure o arquivo .env baseado no .env.example")
-        # Criando .env vazio se não existir para facilitar
-        if not os.path.exists(".env"):
-            with open(".env", "w") as f:
-                f.write("NOTION_TOKEN=\nDATABASE_ID_ESTOQUE=35205465-f1ab-80a8-8de4-e23cea9e7136\n")
-        return
-
-    # 1. Inicializa o Auditor (O Coração do Harness)
+    # 1. Inicializa o Auditor Central
     logger = AuditLogger()
-    logger.log_action("Harness", "STARTUP", "Iniciando ciclo de automação real Trupe BR.")
+    logger.log_action("Harness", "STARTUP", "Sistema Trupe BR Orchestrator Iniciado.")
 
-    # 2. Configura os Agentes
+    # 2. Inicializa os Agentes Especializados
     inventory = InventoryAgent(logger, database_id=db_estoque, notion_token=notion_token)
-    marketing = MarketingAgent(logger, inspiration_dir="inspiracao")
-
-    # 3. Executa Fluxo de Trabalho Integrado
+    atendimento = AgentAtendimento(logger, inventory_agent=inventory)
+    auditoria = AgentAuditoria(logger)
     
-    # Passo A: Automação de Galeria (Novas peças da pasta de inspiração)
-    # Isso cria as páginas no Notion para cada foto encontrada
-    new_items = inventory.register_inspiration_as_stock(inspiration_dir="inspiracao")
-    
-    # Passo B: Sincronizar Estoque Existente
-    inventory.sync_stock()
-    
-    # Passo C: Analisar Inspiração e Gerar Conteúdo de Marketing
-    marketing.analyze_inspiration()
-    post_idea = marketing.generate_post_idea()
+    # 3. Inicializa o Orquestrador (Cérebro)
+    orchestrator = OrchestratorAgent(logger, atendimento, inventory, auditoria)
 
-    # 4. Handoff para outra IA para refinamento criativo (Claude Code ou Gemini)
-    logger.create_handoff(
-        from_agent="Machina_Harness",
-        to_agent="Claude_Code",
-        task_description=f"Refine esta ideia de post para um tom artesanal e carioca: {post_idea}"
-    )
+    # 4. Simulação de Fluxo de Trabalho (Exemplos de Entrada)
+    print("\n--- SIMULAÇÃO DE ENTRADAS ---\n")
+    
+    # Exemplo 1: Dúvida de Cliente (WhatsApp/DM)
+    res1 = orchestrator.handle_input("WhatsApp", "Oi! Qual o material do top natural M e quanto custa?")
+    print(f"RESPOSTA AGENTE: {res1}\n")
 
-    logger.log_action("Harness", "SHUTDOWN", "Ciclo de automação finalizado e auditado no Git.")
+    # Exemplo 2: Venda na Feira
+    res2 = orchestrator.handle_input("Feira", "Vendi 1 top_natural_M agora no dinheiro.")
+    print(f"RESPOSTA AGENTE: {res2}\n")
+
+    # Exemplo 3: Auditoria
+    res3 = orchestrator.handle_input("Internal", "Gerar relatório de performance semanal.")
+    report = auditoria.generate_weekly_report()
+    print(f"RELATÓRIO GERADO: {report['recomendacao']}\n")
+
+    logger.log_action("Harness", "SHUTDOWN", "Sessão finalizada.")
+    
+    # 5. Gera Dashboard Visual
+    dashboard_gen.generate()
 
 if __name__ == "__main__":
     run_harness()

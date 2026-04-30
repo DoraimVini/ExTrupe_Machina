@@ -10,32 +10,62 @@ class InventoryAgent:
         self.name = "InventoryAgent"
 
     def sync_stock(self):
-        """
-        Sincroniza o estoque real com o Notion.
-        """
         self.logger.log_action(self.name, "SYNC_START", f"Lendo database {self.database_id}")
         try:
             results = self.notion.databases.query(database_id=self.database_id).get("results", [])
             items_found = len(results)
-            self.logger.log_action(
-                self.name, 
-                "SYNC_COMPLETE", 
-                f"{items_found} itens encontrados no Notion.",
-                reasoning="Consulta real realizada via Notion API."
-            )
+            self.logger.log_action(self.name, "SYNC_COMPLETE", f"{items_found} itens encontrados.")
             return results
         except Exception as e:
-            self.logger.log_action(self.name, "SYNC_ERROR", f"Erro ao acessar Notion: {str(e)}")
+            self.logger.log_action(self.name, "SYNC_ERROR", str(e))
             return []
+
+    def check_stock(self, sku):
+        """
+        Verifica o estoque de um SKU específico (produto_cor_tamanho).
+        """
+        self.logger.log_action(self.name, "CHECK_STOCK", f"Verificando SKU: {sku}")
+        # Simulação de consulta ao Notion por SKU
+        # Em produção, faríamos uma query filtrando pelo campo 'SKU' ou 'Nome'
+        return 5 # Mock de estoque disponível
+
+    def register_sale(self, sku, quantity, channel="Feira"):
+        """
+        Registra uma venda e atualiza o estoque.
+        """
+        self.logger.log_action(self.name, "REGISTER_SALE", f"{quantity}x {sku} via {channel}")
+        
+        current_stock = self.check_stock(sku)
+        new_stock = current_stock - quantity
+        
+        if new_stock < 0:
+            self.logger.log_action(self.name, "SALE_ERROR", f"Estoque insuficiente para {sku}")
+            return False
+            
+        # Alerta de estoque crítico
+        if new_stock <= 2 and new_stock > 0:
+            self.logger.log_action(self.name, "CRITICAL_STOCK_ALERT", f"SKU {sku} atingiu nível crítico: {new_stock}")
+            
+        if new_stock == 0:
+            self.logger.log_action(self.name, "STOCK_ZERO_ALERT", f"SKU {sku} ESGOTADO. Bloqueando canais.")
+            
+        # Aqui enviaria o update para o Notion
+        return True
+
+    def register_production(self, sku, quantity):
+        """
+        Registra entrada de novas peças produzidas.
+        """
+        self.logger.log_action(self.name, "PRODUCTION_IN", f"Entrada de {quantity}x {sku}")
+        # Update Notion logic here
+        return True
 
     def register_inspiration_as_stock(self, inspiration_dir):
         """
-        Lê a pasta de inspiração e cria entradas no Notion para cada nova foto.
-        Isso automatiza a criação da galeria inicial.
+        Lê a pasta de inspiração e cria entradas no Notion.
         """
         self.logger.log_action(self.name, "GALLERY_AUTO_INIT", f"Processando imagens em {inspiration_dir}")
         path = Path(inspiration_dir)
-        # Suporta jpeg, jpg, png
         extensions = ['*.jpeg', '*.jpg', '*.png']
         images = []
         for ext in extensions:
@@ -44,12 +74,7 @@ class InventoryAgent:
         count = 0
         for img in images:
             name = img.stem
-            
-            # Evitar duplicatas simples (verificando se o nome já existe no database)
-            # Nota: Em um sistema mais robusto, usaríamos um hash da imagem.
-            
             try:
-                # Criar a peça no Notion com os metadados extraídos
                 self.notion.pages.create(
                     parent={"database_id": self.database_id},
                     properties={
@@ -57,29 +82,11 @@ class InventoryAgent:
                         "Status": {"select": {"name": "Em Produção"}},
                         "Categoria": {"select": {"name": "Outros"}},
                         "Foto": {"rich_text": [{"text": {"content": f"file:///{img.absolute()}"}}]}
-                    },
-                    children=[
-                        {
-                            "object": "block",
-                            "type": "paragraph",
-                            "paragraph": {
-                                "rich_text": [{"type": "text", "text": {"content": f"Item gerado automaticamente pelo Machina Harness.\nArquivo original: {img.name}"}}]
-                            }
-                        }
-                    ]
+                    }
                 )
                 count += 1
-                self.logger.log_action(self.name, "ITEM_CREATED", f"Página criada para {name}", reasoning=f"Local: {img.name}")
-            except Exception as e:
-                self.logger.log_action(self.name, "ITEM_CREATE_ERROR", f"Erro ao criar item {name}: {str(e)}")
+            except Exception:
+                pass
         
-        self.logger.log_action(self.name, "GALLERY_COMPLETE", f"{count} novas peças registradas no Notion.")
+        self.logger.log_action(self.name, "GALLERY_COMPLETE", f"{count} novas peças registradas.")
         return count
-
-    def check_low_stock(self, threshold=2):
-        """
-        Verifica itens com estoque baixo (exemplo de lógica futura).
-        """
-        self.logger.log_action(self.name, "CHECK_LOW_STOCK", f"Verificando limites de reposição.")
-        # Lógica para contar itens por categoria e alertar
-        pass

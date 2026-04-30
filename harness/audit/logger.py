@@ -38,8 +38,8 @@ class AuditLogger:
         
         # Auto-commit do log para garantir imutabilidade/histórico
         try:
-            subprocess.run(["git", "add", str(self.audit_file)], capture_output=True)
-            subprocess.run(["git", "commit", "-m", f"[AUDIT] {agent_name}: {action_type}"], capture_output=True)
+            subprocess.run(["git", "add", str(self.audit_file)], capture_output=True, check=False)
+            subprocess.run(["git", "commit", "-m", f"[AUDIT] {agent_name}: {action_type}"], capture_output=True, check=False)
         except Exception:
             pass # Silencioso se não houver git ou nada para comitar
 
