@@ -126,5 +126,13 @@
         "details": "Canal: Internal | Conteúdo: Gerar relatório de performance semanal.",
         "reasoning": null,
         "status": "logged"
+    },
+    {
+        "timestamp": "2026-04-30T14:52:03.472463",
+        "agent": "ORCHESTRATOR",
+        "action": "INTENT_IDENTIFIED",
+        "details": "AGENT_AUDITORIA",
+        "reasoning": null,
+        "status": "logged"
     }
 ]
