@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-terracotta: #E2725B;
+  --color-ochre: #CC7722;
+  --color-sienna: #A0522D;
+  --color-sand: #C2B280;
+  --color-earth-dark: #2C1E16;
+  --color-earth-muted: #4A3728;
+  
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-dark: rgba(0, 0, 0, 0.3);
+  
+  --font-sans: 'Outfit', 'Inter', sans-serif;
+}
+
+:root {
+  --background: #1A120B;
+  --foreground: #F5EBE0;
+}
+
+body {
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(25, 39%, 30%, 0.15) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(35, 70%, 20%, 0.1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(20, 50%, 25%, 0.15) 0, transparent 50%);
+  color: var(--foreground);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@layer components {
+  .glass {
+    @apply bg-glass-bg border border-glass-border backdrop-blur-md;
+  }
+  
+  .glass-card {
+    @apply bg-glass-bg border border-glass-border backdrop-blur-md rounded-2xl shadow-xl;
+  }
+  
+  .glass-button {
+    @apply px-4 py-2 rounded-lg transition-all duration-300
+           border border-glass-border bg-glass-bg
+           hover:bg-white/10 hover:border-white/20 hover:scale-105
+           active:scale-95;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-terracotta to-ochre;
+  }
+}
