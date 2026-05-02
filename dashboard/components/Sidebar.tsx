@@ -15,8 +15,11 @@ const secondaryItems = [
 export default function Sidebar() {
   return (
     <aside className="w-64 glass border-r border-glass-border flex flex-col h-screen sticky top-0">
-      <div className="p-8">
-        <img src="/logo.png" alt="Trupe BR Logo" className="w-32 h-auto hover:scale-105 transition-transform duration-500" />
+      <div className="p-8 flex flex-col items-center">
+        <img src="/logo.png" alt="Trupe BR Logo" className="w-24 h-auto hover:scale-110 transition-transform duration-700 ease-in-out" />
+        <div className="mt-4 text-center">
+          <p className="text-[10px] font-bold text-terracotta uppercase tracking-[0.4em] animate-fade-in">Tricô Artesanal</p>
+        </div>
       </div>
 
       <nav className="flex-1 px-4 space-y-8 mt-4">

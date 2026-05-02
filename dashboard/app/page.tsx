@@ -3,9 +3,26 @@ import StatCard from "@/components/StatCard";
 import { getStock, getCalendar } from "@/lib/notion";
 import { ShoppingBag, Calendar, Truck, AlertCircle } from "lucide-react";
 
+interface StockItem {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  status: string;
+  photo?: string;
+}
+
+interface CalendarEvent {
+  id: string;
+  name: string;
+  date: string;
+  type: string;
+  platform: string;
+}
+
 export default async function DashboardPage() {
-  let stock = [];
-  let calendar = [];
+  let stock: StockItem[] = [];
+  let calendar: CalendarEvent[] = [];
   
   try {
     [stock, calendar] = await Promise.all([getStock(), getCalendar()]);
@@ -51,14 +68,18 @@ export default async function DashboardPage() {
             icon={Truck} 
           />
           <StatCard 
-            label="Próximas Feiras" 
-            value={upcomingFairs} 
-            icon={Calendar} 
+            label="Receita Total" 
+            value="R$ 14.675,00" 
+            icon={ShoppingBag} 
+            trend="+12%"
+            trendUp={true}
           />
           <StatCard 
-            label="Alertas" 
-            value="0" 
+            label="Lucro Líquido" 
+            value="R$ 11.360,00" 
             icon={AlertCircle} 
+            trend="77.4%"
+            trendUp={true}
           />
         </div>
 

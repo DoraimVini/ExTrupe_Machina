@@ -1,0 +1,16 @@
+TRUPE BR — ESTOQUE,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5,Unnamed: 6,Unnamed: 7
+Estoque base: 26/04 | Produção registrada: semana atual | ⚠️ Crítico = 2 ou menos,,,,,,,
+Produto,Estoque 26/04,Produzido (semana),Vendido Feira,Vendido Online,Estoque Atual,Status,Observação
+Top,11,9,0,0,20,✅ OK,
+Biquíni (sutiã),10,5,0,0,15,✅ OK,
+Turbante,23,0,0,0,23,✅ OK,
+Faixa Triangular,12,6,0,0,18,✅ OK,
+Faixa de Amarrar,12,0,0,0,12,✅ OK,
+Faixa Larga,2,0,0,0,2,⚠️ Crítico,
+Touca,8,0,0,0,8,✅ OK,
+Boné,0,0,0,0,0,❌ Sem estoque,
+Bolsa,2,0,0,0,2,⚠️ Crítico,
+Saia,2,0,0,0,2,⚠️ Crítico,
+Poncho,0,1,0,0,1,⚠️ Crítico,Novo produto
+Saia Macramê,1,1,0,0,2,⚠️ Crítico,Novo produto — material: cordão de algodão
+Macramê (outros),0,0,0,0,0,❌ Sem estoque,
