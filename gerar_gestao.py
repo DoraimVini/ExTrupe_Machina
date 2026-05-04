@@ -4,6 +4,9 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils.dataframe import dataframe_to_rows
 from datetime import datetime
 import re
+import os
+from notion_client import Client
+from dotenv import load_dotenv
 
 # ============================================================
 # 1. VENDAS EXTRAÍDAS DAS IMAGENS (DATAS CORRIGIDAS)
@@ -404,3 +407,91 @@ wb.save(output_path)
 wb.save(output_path)
 print(f"Arquivo gerado: {output_path}")
 print(f"Resumo: Receita Total = R$ {receita_total:,.2f}, Lucro = R$ {lucro_liquido:,.2f}, Margem = {margem_liquida:.1%}")
+
+# ============================================================
+# 7. SINCRONIZAÇÃO COM NOTION
+# ============================================================
+def sync_to_notion(df_estoque, df_produtos):
+    load_dotenv()
+    token = os.getenv("NOTION_TOKEN")
+    db_id = os.getenv("DATABASE_ID_ESTOQUE")
+    
+    if not token or not db_id:
+        print("\n[Notion] Erro: NOTION_TOKEN ou DATABASE_ID_ESTOQUE não encontrados no .env")
+        return
+
+    print(f"\n[Notion] Sincronizando com Notion (DB: {db_id})...")
+    notion = Client(auth=token)
+    
+    # Agregar estoque por produto para o Notion
+    # O dashboard espera um status por produto principal
+    df_notion = df_estoque.groupby("Produto").agg({
+        "Estoque Atual": "sum",
+        "Status": lambda x: "✅ OK" if all(v == "✅ OK" for v in x) else ("❌ Sem estoque" if all(v == "❌ Sem estoque" for v in x) else "⚠️ Crítico")
+    }).reset_index()
+    
+    # Obter preços e categorias
+    precos = df_produtos.groupby("Produto")["Preço de Venda (R$)"].first().to_dict()
+    categorias = df_produtos.groupby("Produto")["Categoria"].first().to_dict()
+
+    # Buscar páginas existentes no Notion para evitar duplicatas
+    try:
+        # Removendo hífens se necessário para a query (algumas versões da API preferem assim)
+        clean_db_id = db_id.replace("-", "")
+        response = notion.databases.query(database_id=clean_db_id)
+        pages = response.get("results", [])
+    except Exception as e:
+        print(f"[Notion] Erro ao consultar base: {e}")
+        return
+
+    notion_pages = {}
+    for page in pages:
+        nome_prop = page["properties"].get("Nome", {}).get("title", [])
+        if nome_prop:
+            nome = nome_prop[0]["text"]["content"]
+            notion_pages[nome] = page["id"]
+
+    # Mapeamento de nomes do Script para o Notion (Alinhamento de Schema)
+    mapping = {
+        "Touca Unisex": "Touca",
+        "Faixa de Cabelo": "Faixa Larga", # Alinhado com o que vimos no Notion
+        "Faixa Larga Dreads": "Faixa de Amarrar",
+    }
+
+    success_count = 0
+    for _, row in df_notion.iterrows():
+        original_name = row["Produto"]
+        nome_notion = mapping.get(original_name, original_name)
+        status = row["Status"]
+        preco = precos.get(original_name, 0)
+        categoria = categorias.get(original_name, "Outros")
+        
+        # Propriedades para atualizar/criar
+        # Nota: Usamos as chaves exatamente como detectadas no check_props.py
+        props = {
+            "Status": {"select": {"name": status}},
+            "Preço": {"number": float(preco)},
+            "Categoria": {"select": {"name": categoria}}
+        }
+        
+        try:
+            # Remover emojis apenas para o print no terminal Windows
+            safe_status = status.replace("✅", "[OK]").replace("⚠️", "[!]").replace("❌", "[X]")
+            
+            if nome_notion in notion_pages:
+                notion.pages.update(page_id=notion_pages[nome_notion], properties=props)
+                print(f"  [v] Atualizado: {nome_notion} -> {safe_status}")
+            else:
+                props["Nome"] = {"title": [{"text": {"content": nome_notion}}]}
+                notion.pages.create(parent={"database_id": clean_db_id}, properties=props)
+                print(f"  [+] Criado: {nome_notion} -> {safe_status}")
+            success_count += 1
+        except Exception as e:
+            # Usar repr para evitar erros de encode no próprio erro
+            print(f"  [x] Erro ao processar item: {repr(e)}")
+
+    print(f"[Notion] Sincronização concluída! {success_count} itens processados.")
+
+# Executar sincronização
+if __name__ == "__main__":
+    sync_to_notion(df_estoque, df_produtos)

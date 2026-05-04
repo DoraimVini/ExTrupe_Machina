@@ -30,8 +30,9 @@ export default async function DashboardPage() {
     console.error("Dashboard data fetch error:", error);
   }
 
+  const syncError = stock.length === 0 && calendar.length === 0;
   const totalItems = stock.length;
-  const availableItems = stock.filter(item => item.status === "Disponível").length;
+  const availableItems = stock.filter(item => item.status.includes("OK")).length;
   const upcomingFairs = calendar.length;
 
   return (
@@ -46,9 +47,11 @@ export default async function DashboardPage() {
           </div>
           
           <div className="flex gap-4">
-            <div className="glass-card px-4 py-2 flex items-center gap-2 border-white/[0.05]">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs font-bold text-sand/80 uppercase">Notion Sync: OK</span>
+            <div className={`glass-card px-4 py-2 flex items-center gap-2 border-white/[0.05] ${syncError ? 'border-red-500/50' : ''}`}>
+              <div className={`w-2 h-2 rounded-full animate-pulse ${syncError ? 'bg-red-500' : 'bg-green-500'}`} />
+              <span className="text-xs font-bold text-sand/80 uppercase">
+                Notion Sync: {syncError ? 'ERROR' : 'OK'}
+              </span>
             </div>
           </div>
         </header>
