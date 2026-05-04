@@ -1,7 +1,8 @@
 import Sidebar from "@/components/Sidebar";
 import StatCard from "@/components/StatCard";
-import { getStock, getCalendar } from "@/lib/notion";
-import { ShoppingBag, Calendar, Truck, AlertCircle } from "lucide-react";
+import { getStock, getCalendar, getFinanceSummary } from "@/lib/notion";
+import { ShoppingBag, Calendar, Truck, AlertCircle, TrendingUp } from "lucide-react";
+import FinanceDetail from "@/components/FinanceDetail";
 
 interface StockItem {
   id: string;
@@ -24,8 +25,10 @@ export default async function DashboardPage() {
   let stock: StockItem[] = [];
   let calendar: CalendarEvent[] = [];
   
+  let finance = null;
+  
   try {
-    [stock, calendar] = await Promise.all([getStock(), getCalendar()]);
+    [stock, calendar, finance] = await Promise.all([getStock(), getCalendar(), getFinanceSummary()]);
   } catch (error) {
     console.error("Dashboard data fetch error:", error);
   }
@@ -72,16 +75,16 @@ export default async function DashboardPage() {
           />
           <StatCard 
             label="Receita Total" 
-            value="R$ 14.675,00" 
-            icon={ShoppingBag} 
-            trend="+12%"
+            value={`R$ ${finance?.totals.receita.toLocaleString("pt-BR") || "0,00"}`} 
+            icon={TrendingUp} 
+            trend={finance?.insights[0] || ""} 
             trendUp={true}
           />
           <StatCard 
             label="Lucro Líquido" 
-            value="R$ 11.360,00" 
+            value={`R$ ${finance?.totals.lucro.toLocaleString("pt-BR") || "0,00"}`} 
             icon={AlertCircle} 
-            trend="77.4%"
+            trend={`Margem ${finance?.totals.margem_media.toFixed(1)}%`}
             trendUp={true}
           />
         </div>
@@ -161,6 +164,13 @@ export default async function DashboardPage() {
             </div>
           </div>
         </div>
+
+        {finance && (
+          <div className="mt-8">
+            <h2 className="text-xl font-bold text-white mb-6">Relatório Financeiro Detalhado</h2>
+            <FinanceDetail data={finance} />
+          </div>
+        )}
       </main>
     </div>
   );

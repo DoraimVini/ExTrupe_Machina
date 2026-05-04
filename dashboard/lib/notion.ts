@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 const NOTION_TOKEN = process.env.NOTION_TOKEN;
 const STOCK_DB_ID = process.env.NOTION_STOCK_DB_ID;
 const CALENDAR_DB_ID = process.env.NOTION_CALENDAR_DB_ID;
@@ -7,6 +10,26 @@ const headers = {
   "Notion-Version": "2022-06-28",
   "Content-Type": "application/json"
 };
+
+export async function updateStock(pageId: string, properties: any) {
+  try {
+    const res = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ properties })
+    });
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(`Notion Update Error: ${JSON.stringify(errorData)}`);
+    }
+    
+    return await res.json();
+  } catch (error) {
+    console.error("updateStock error:", error);
+    throw error;
+  }
+}
 
 export async function getStock() {
   try {
@@ -37,6 +60,20 @@ export async function getStock() {
   } catch (error) {
     console.error("getStock error:", error);
     return []; // Return empty array to prevent dashboard crash
+  }
+}
+
+export async function getFinanceSummary() {
+  try {
+    const filePath = path.join(process.cwd(), "data", "finance_summary.json");
+    if (!fs.existsSync(filePath)) {
+      return null;
+    }
+    const fileContent = fs.readFileSync(filePath, "utf-8");
+    return JSON.parse(fileContent);
+  } catch (error) {
+    console.error("Error reading finance summary:", error);
+    return null;
   }
 }
 

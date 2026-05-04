@@ -5,6 +5,7 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from datetime import datetime
 import re
 import os
+import json
 from notion_client import Client
 from dotenv import load_dotenv
 
@@ -492,6 +493,71 @@ def sync_to_notion(df_estoque, df_produtos):
 
     print(f"[Notion] Sincronização concluída! {success_count} itens processados.")
 
+def export_financial_summary(df_vendas, df_produtos):
+    # Calcular totais
+    receita_total = df_vendas["Receita (R$)"].sum()
+    lucro_total = df_vendas["Lucro (R$)"].sum()
+    custo_total = df_vendas["Custo Total (R$)"].sum()
+    ticket_medio = receita_total / len(df_vendas) if len(df_vendas) > 0 else 0
+    
+    # Detalhes por categoria/produto
+    categoria_summary = df_vendas.groupby("Produto").agg({
+        "Receita (R$)": "sum",
+        "Lucro (R$)": "sum",
+        "Qtd": "sum"
+    }).reset_index().to_dict(orient="records")
+    
+    # Adicionar margem por categoria
+    for cat in categoria_summary:
+        cat["Margem (%)"] = (cat["Lucro (R$)"] / cat["Receita (R$)"] * 100) if cat["Receita (R$)"] > 0 else 0
+
+    # Analise por Mês
+    df_vendas['Data'] = pd.to_datetime(df_vendas['Data'])
+    monthly_stats = df_vendas.groupby(df_vendas['Data'].dt.strftime('%Y-%m')).agg({
+        "Receita (R$)": "sum",
+        "Lucro (R$)": "sum"
+    }).reset_index().to_dict(orient="records")
+
+    # Identificar Best Sellers e Alertas
+    sorted_by_revenue = sorted(categoria_summary, key=lambda x: x["Receita (R$)"], reverse=True)
+    sorted_by_profit = sorted(categoria_summary, key=lambda x: x["Lucro (R$)"], reverse=True)
+    low_margin_items = [item["Produto"] for item in categoria_summary if item["Margem (%)"] < 40]
+
+    best_revenue = sorted_by_revenue[0]["Produto"] if sorted_by_revenue else "N/A"
+    best_profit = sorted_by_profit[0]["Produto"] if sorted_by_profit else "N/A"
+
+    summary = {
+        "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "totals": {
+            "receita": float(receita_total),
+            "lucro": float(lucro_total),
+            "custo": float(custo_total),
+            "ticket_medio": float(ticket_medio),
+            "margem_media": float(lucro_total / receita_total * 100) if receita_total > 0 else 0
+        },
+        "monthly": monthly_stats,
+        "by_category": categoria_summary,
+        "performance": {
+            "best_seller_revenue": best_revenue,
+            "best_seller_profit": best_profit,
+            "low_margin_alerts": low_margin_items
+        },
+        "insights": [
+            f"A receita total de R$ {receita_total:,.2f} reflete uma performance sólida com {len(df_vendas)} unidades vendidas.",
+            f"O produto '{best_revenue}' é o seu campeão de faturamento, enquanto '{best_profit}' traz o melhor retorno financeiro líquido.",
+            f"Alerta: Os produtos {', '.join(low_margin_items[:3])} estão operando com margem inferior a 40%. Avalie os custos de produção ou reajuste o preço." if low_margin_items else "Todas as margens estão saudáveis (acima de 40%).",
+            f"Sua margem líquida média de {lucro_total/receita_total*100:.1f}% indica que para cada R$ 100 vendidos, R$ {lucro_total/receita_total*100:.2f} sobram limpos no caixa."
+        ]
+    }
+    
+    # Salvar para o dashboard
+    os.makedirs("dashboard/data", exist_ok=True)
+    with open("dashboard/data/finance_summary.json", "w", encoding="utf-8") as f:
+        json.dump(summary, f, indent=4, ensure_ascii=False)
+    print(f"[Dashboard] Resumo financeiro detalhado exportado com sucesso.")
+
 # Executar sincronização
 if __name__ == "__main__":
+    # Exportar também o resumo financeiro para o dashboard
+    export_financial_summary(df_vendas_final, df_produtos)
     sync_to_notion(df_estoque, df_produtos)

@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { LayoutDashboard, ShoppingBag, Calendar, Settings, HelpCircle } from "lucide-react";
+import { LayoutDashboard, ShoppingBag, Calendar, Settings, HelpCircle, LogOut } from "lucide-react";
+import { auth, signOut } from "@/auth";
+
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Overview", href: "/" },
@@ -12,8 +14,13 @@ const secondaryItems = [
   { icon: HelpCircle, label: "Ajuda", href: "/help" },
 ];
 
-export default function Sidebar() {
+export default async function Sidebar() {
+  const session = await auth();
+  const userName = session?.user?.name || "Usuário";
+  const userInitial = userName.charAt(0).toUpperCase();
+
   return (
+
     <aside className="w-64 glass border-r border-glass-border flex flex-col h-screen sticky top-0">
       <div className="p-8 flex flex-col items-center">
         <img src="/logo.png" alt="Trupe BR Logo" className="w-24 h-auto hover:scale-110 transition-transform duration-700 ease-in-out" />
@@ -56,17 +63,33 @@ export default function Sidebar() {
         </div>
       </nav>
 
-      <div className="p-4">
+      <div className="p-4 space-y-2">
         <div className="glass-card p-4 flex items-center gap-3 bg-white/[0.02]">
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-terracotta to-ochre flex items-center justify-center font-bold text-white shadow-lg">
-            V
+            {userInitial}
           </div>
-          <div>
-            <p className="text-sm font-bold text-white">Vini</p>
+          <div className="flex-1">
+            <p className="text-sm font-bold text-white">{userName}</p>
             <p className="text-[10px] text-sand/50">Admin</p>
           </div>
         </div>
+
+        <form
+          action={async () => {
+            "use server";
+            await signOut({ redirectTo: "/login" });
+          }}
+        >
+          <button
+            type="submit"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400/70 hover:text-red-400 hover:bg-red-500/5 transition-all group"
+          >
+            <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
+            <span className="font-medium">Sair</span>
+          </button>
+        </form>
       </div>
+
     </aside>
   );
 }

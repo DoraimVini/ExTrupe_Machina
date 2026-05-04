@@ -1,6 +1,10 @@
 import Sidebar from "@/components/Sidebar";
+import StockManager from "@/components/StockManager";
+import { getStock } from "@/lib/notion";
 
-export default function StockPage() {
+export default async function StockPage() {
+  const stock = await getStock();
+
   return (
     <div className="flex min-h-screen">
       <Sidebar />
@@ -8,14 +12,11 @@ export default function StockPage() {
         <header className="flex justify-between items-center mb-10">
           <div>
             <h1 className="text-4xl font-bold text-white tracking-tight">Estoque</h1>
-            <p className="text-sand/60 mt-1">Gerenciamento completo do seu inventário.</p>
+            <p className="text-sand/60 mt-1">Gerencie seu inventário e status de produção.</p>
           </div>
         </header>
         
-        <div className="glass-card p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
-          <h2 className="text-2xl font-bold text-white mb-4">Página em Construção</h2>
-          <p className="text-sand/60 max-w-md mx-auto">Esta página exibirá uma visão detalhada do estoque, permitindo edições, filtros avançados e integrações diretas com a base de dados.</p>
-        </div>
+        <StockManager initialData={stock} />
       </main>
     </div>
   );

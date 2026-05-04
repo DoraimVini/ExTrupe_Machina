@@ -1,0 +1,171 @@
+{
+    "updated_at": "2026-05-04 12:15:30",
+    "totals": {
+        "receita": 14675.0,
+        "lucro": 11360.0,
+        "custo": 3315.0,
+        "ticket_medio": 70.55288461538461,
+        "margem_media": 77.4105621805792
+    },
+    "monthly": [
+        {
+            "Data": "2026-01",
+            "Receita (R$)": 3205,
+            "Lucro (R$)": 2387.0
+        },
+        {
+            "Data": "2026-02",
+            "Receita (R$)": 2995,
+            "Lucro (R$)": 2291.5
+        },
+        {
+            "Data": "2026-03",
+            "Receita (R$)": 7245,
+            "Lucro (R$)": 5702.5
+        },
+        {
+            "Data": "2026-04",
+            "Receita (R$)": 1230,
+            "Lucro (R$)": 979.0
+        }
+    ],
+    "by_category": [
+        {
+            "Produto": "Biquíni (sutiã)",
+            "Receita (R$)": 2140,
+            "Lucro (R$)": 1659.5,
+            "Qtd": 31,
+            "Margem (%)": 77.54672897196262
+        },
+        {
+            "Produto": "Bolsa",
+            "Receita (R$)": 80,
+            "Lucro (R$)": 80.0,
+            "Qtd": 2,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Boné",
+            "Receita (R$)": 40,
+            "Lucro (R$)": 30.5,
+            "Qtd": 1,
+            "Margem (%)": 76.25
+        },
+        {
+            "Produto": "Faixa A",
+            "Receita (R$)": 215,
+            "Lucro (R$)": 215.0,
+            "Qtd": 2,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Amarrar",
+            "Receita (R$)": 585,
+            "Lucro (R$)": 585.0,
+            "Qtd": 12,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Cabelo",
+            "Receita (R$)": 40,
+            "Lucro (R$)": 40.0,
+            "Qtd": 2,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Delta",
+            "Receita (R$)": 375,
+            "Lucro (R$)": 375.0,
+            "Qtd": 11,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Ombro",
+            "Receita (R$)": 70,
+            "Lucro (R$)": 70.0,
+            "Qtd": 2,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Top",
+            "Receita (R$)": 60,
+            "Lucro (R$)": 60.0,
+            "Qtd": 1,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa Triangular",
+            "Receita (R$)": 105,
+            "Lucro (R$)": 85.5,
+            "Qtd": 3,
+            "Margem (%)": 81.42857142857143
+        },
+        {
+            "Produto": "Faixa Triângulo",
+            "Receita (R$)": 40,
+            "Lucro (R$)": 40.0,
+            "Qtd": 1,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Faixa de Amarrar",
+            "Receita (R$)": 35,
+            "Lucro (R$)": 28.5,
+            "Qtd": 1,
+            "Margem (%)": 81.42857142857143
+        },
+        {
+            "Produto": "Faixa de Cabelo",
+            "Receita (R$)": 180,
+            "Lucro (R$)": 141.0,
+            "Qtd": 6,
+            "Margem (%)": 78.33333333333333
+        },
+        {
+            "Produto": "Macramê",
+            "Receita (R$)": 195,
+            "Lucro (R$)": 195.0,
+            "Qtd": 1,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Outro",
+            "Receita (R$)": 30,
+            "Lucro (R$)": 30.0,
+            "Qtd": 1,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Saia",
+            "Receita (R$)": 365,
+            "Lucro (R$)": 365.0,
+            "Qtd": 4,
+            "Margem (%)": 100.0
+        },
+        {
+            "Produto": "Top",
+            "Receita (R$)": 9710,
+            "Lucro (R$)": 6950.0,
+            "Qtd": 120,
+            "Margem (%)": 71.57569515962925
+        },
+        {
+            "Produto": "Touca Unisex",
+            "Receita (R$)": 410,
+            "Lucro (R$)": 410.0,
+            "Qtd": 9,
+            "Margem (%)": 100.0
+        }
+    ],
+    "performance": {
+        "best_seller_revenue": "Top",
+        "best_seller_profit": "Top",
+        "low_margin_alerts": []
+    },
+    "insights": [
+        "A receita total de R$ 14,675.00 reflete uma performance sólida com 208 unidades vendidas.",
+        "O produto 'Top' é o seu campeão de faturamento, enquanto 'Top' traz o melhor retorno financeiro líquido.",
+        "Todas as margens estão saudáveis (acima de 40%).",
+        "Sua margem líquida média de 77.4% indica que para cada R$ 100 vendidos, R$ 77.41 sobram limpos no caixa."
+    ]
+}
